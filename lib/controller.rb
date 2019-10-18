@@ -3,7 +3,14 @@ require "slack-notifier"
 require "k8s-client"
 require "concurrent"
 require 'logger'
+require 'yaml'
+require 'mail'
+
 require_relative "k8s_client"
+
+Mail.defaults do
+  delivery_method :smtp, address: ENV["EMAIL_SMTP_HOST"], port: ENV["EMAIL_SMTP_PORT"], user_name: ENV["EMAIL_SMTP_USERNAME"], password: ENV["EMAIL_SMTP_PASSWORD"]
+end
 
 class Controller
   TIMEOUT = 3600*24*365
@@ -64,6 +71,21 @@ class Controller
         slack.post at: at, attachments: [attachment]
       rescue => e
         logger.error "Something went wrong with the Slack notification: #{e.message}"
+      end
+    end
+
+    if ENV.fetch("ENABLE_EMAIL_NOTIFICATIONS", "false") =~ /true/i
+      begin
+        mail = Mail.new do
+          from    ENV["EMAIL_FROM_ADDRESS"]
+          to      ENV["EMAIL_TO_ADDRESS"]
+          subject "#{ENV.fetch("EMAIL_SUBJECT_PREFIX", "[Velero]")} #{msg}"
+          body    "Run `velero #{event.resource.kind.downcase} describe #{event.resource.metadata.name} --details` for more information."
+        end
+
+        mail.deliver!
+      rescue => e
+        logger.error "Something went wrong with the email notification: #{e.message}"
       end
     end
   end

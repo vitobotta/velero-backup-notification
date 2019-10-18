@@ -1,11 +1,22 @@
 image:
   repository: vitobotta/velero-backup-notification
-  tag: v1571423030
+  tag: v1571426322
 
 slack:
   enabled: true
   webhook: "https://...."
   channel: "stuff"
   username: Velero
+
+email:
+  enabled: true
+  smtp:
+    host: some-smtp-host.com
+    port: 587
+    username: blah
+    password: blah
+  from_address: from@email.com
+  to_address: to@email.com
+  subject_prefix: "[Velero]"
 
 velero_namespace: velero
