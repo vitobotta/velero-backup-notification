@@ -2,7 +2,7 @@
 
 This is a simple Kubernetes controller written in Ruby that sends email and/or Slack notifications when backups or restores are performed by [Velero](https://velero.io/).
 
-## Installation
+## Installation
 
 - Clone the repo
 - Install with Helm
