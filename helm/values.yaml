@@ -1,0 +1,11 @@
+image:
+  repository: vitobotta/velero-backup-notification
+  tag: v1571423030
+
+slack:
+  enabled: true
+  webhook: "https://...."
+  channel: "stuff"
+  username: Velero
+
+velero_namespace: velero

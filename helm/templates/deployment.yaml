@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: velero-backup-notification
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velero-backup-notification
+  template:
+    metadata:
+      labels:
+        app: velero-backup-notification
+    spec:
+      serviceAccountName: velero-server
+      containers:
+        - name: velero-backup-notification
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: VELERO_NAMESPACE
+              value: {{ .Values.velero_namespace | quote }}
+            - name: ENABLE_SLACK_NOTIFICATIONS
+              value: {{ .Values.slack.enabled | quote }}
+            - name: SLACK_USERNAME
+              value: {{ .Values.slack.username
+            - name: SLACK_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  key: slack_webhook
+                  name: velero-backup-notification-secrets
+            - name: SLACK_CHANNEL
+              valueFrom:
+                secretKeyRef:
+                  key: slack_channel
+                  name: velero-backup-notification-secrets

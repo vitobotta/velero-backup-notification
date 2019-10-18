@@ -1,0 +1,8 @@
+#!/bin/bash
+
+IMAGE="vitobotta/velero-backup-notification"
+VERSION="v"`date +%s`""
+
+docker build -t ${IMAGE}:${VERSION} .
+
+echo "${VERSION}" > current_version

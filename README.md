@@ -1,1 +1,3 @@
 # velero-backup-notification
+
+envsubst
