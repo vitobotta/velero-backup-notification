@@ -91,7 +91,7 @@ class Controller
   end
 
   def watch_resources(resource_type)
-    resource_version = k8s_client.api("velero.io/v1").resource(resource_type.to_s, namespace: velero_namespace).list.map{|resource| resource.metadata.resourceVersion}.map(&:to_i).max.to_s
+    resource_version = k8s_client.api("velero.io/v1").resource(resource_type.to_s, namespace: velero_namespace).meta_list.metadata.resourceVersion
 
     begin
       logger.info "Watching #{resource_type}..."
