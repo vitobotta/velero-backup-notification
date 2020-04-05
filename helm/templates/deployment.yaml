@@ -12,7 +12,7 @@ spec:
       labels:
         app: velero-backup-notification
     spec:
-      serviceAccountName: velero-server
+      serviceAccountName: velero
       containers:
         - name: velero-backup-notification
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
